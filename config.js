@@ -4,5 +4,8 @@ module.exports = {
         url: process.env.MONGOLAB_URI ||
             process.env.MONGOHQ_URL ||
             'mongodb://localhost/Nouns'
-    }
+    },
+
+    //secret password
+    password: process.env.PASSWORD || "password"
 };
