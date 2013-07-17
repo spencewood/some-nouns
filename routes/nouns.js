@@ -1,3 +1,5 @@
+var async = require('async');
+var _ = require('underscore');
 var Noun = require('../models/noun');
 
 exports.list = function(req, res){
@@ -7,8 +9,27 @@ exports.list = function(req, res){
             res.send(500, err);
             return;
         }
-        res.render('index', { nouns:  docs });
+        res.render('index', { nouns:  _.pluck(docs, 'name') });
     });
+};
+
+exports.random = function(req, res){
+    var num = req.params.number;
+
+    if(!isNaN(num)){
+        var calls = [];
+        for(var i=0; i<num; i++){
+            calls.push(function(callback){
+                Noun.random(function(err, noun){
+                    callback(null, noun);
+                });
+            });
+        }
+
+        async.parallel(calls, function(err, docs){
+            res.render('index', { nouns: _.pluck(docs, 'name') });
+        });
+    }
 };
 
 exports.import = function(req, res){

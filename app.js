@@ -23,6 +23,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', nouns.list);
+app.get('/random/:number', nouns.random);
 app.post('/nouns/import', nouns.import);
 
 http.createServer(app).listen(app.get('port'), function(){
