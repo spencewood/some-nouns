@@ -8,3 +8,5 @@ var Noun = new Schema({
         trim: true
     }
 });
+
+module.exports = Noun;

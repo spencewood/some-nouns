@@ -1,5 +1,9 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  - if (nouns.length)
+    ul
+      - nouns.forEach(function(noun){
+        li= noun.name
+      - })
+    

@@ -1,5 +1,5 @@
 var express = require('express');
-var noun = require('./routes/noun');
+var nouns = require('./routes/nouns');
 var http = require('http');
 var path = require('path');
 
@@ -22,8 +22,8 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
-app.get('/', noun.list);
-app.post('/import', noun.list);
+app.get('/', nouns.list);
+app.post('/nouns/import', nouns.import);
 
 http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
