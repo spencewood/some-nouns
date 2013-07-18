@@ -10,27 +10,28 @@ exports.list = function(req, res){
             res.send(500, err);
             return;
         }
-        res.render('index', { nouns: _.pluck(docs, 'name') });
+        res.render('index', { nouns: _(docs).pluck('name') });
     });
 };
 
 exports.random = function(req, res){
     var num = req.params.number;
+    var calls = [];
 
-    if(!isNaN(num)){
-        var calls = [];
-        _(num).times(function(){
-            calls.push(function(callback){
-                Noun.random(function(err, noun){
-                    callback(null, noun);
-                });
-            });
-        });
-
-        async.parallel(calls, function(err, docs){
-            res.render('index', { nouns: _.pluck(docs, 'name') });
-        });
+    if(isNaN(num)){
+        res.send(500, "Must supply a number.");
+        return;
     }
+
+    _(num).times(function(){
+        calls.push(function(callback){
+            Noun.random(callback);
+        });
+    });
+
+    async.parallel(calls, function(err, docs){
+        res.render('index', { nouns: _(docs).pluck('name') });
+    });
 };
 
 exports.import = function(req, res){
@@ -40,6 +41,7 @@ exports.import = function(req, res){
             res.send(401);
             return;
         }
+
         if(req.body.nouns !== null){
             var nouns = req.body.nouns.split(',').map(function(noun){
                 return { name: noun };
