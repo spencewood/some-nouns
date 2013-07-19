@@ -1,9 +1,9 @@
 extends layout
 
 block content
-  - if (nouns.length)
-    ul
-      - nouns.forEach(function(noun){
-        li= noun
-      - })
-    
+    - if (nouns.length)
+        #words.text-center
+            ul.unstyled
+                - nouns.forEach(function(noun){
+                    li= noun
+                - })

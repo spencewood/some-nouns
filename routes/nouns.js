@@ -1,7 +1,6 @@
 var async = require('async');
 var _ = require('underscore');
 var Noun = require('../models/noun');
-var config = require('../config');
 
 exports.list = function(req, res){
     Noun.find({}, function(err, docs){
@@ -32,30 +31,4 @@ exports.random = function(req, res){
     async.parallel(calls, function(err, docs){
         res.render('index', { nouns: _(docs).pluck('name') });
     });
-};
-
-exports.import = function(req, res){
-    if(req.body !== null){
-        //dirty auth
-        if(req.body.password !== config.password){
-            res.send(401);
-            return;
-        }
-
-        if(req.body.nouns !== null){
-            var nouns = req.body.nouns.split(',').map(function(noun){
-                return { name: noun };
-            });
-
-            Noun.create(nouns, function(err){
-                if(err !== null){
-                    console.error(err);
-                    res.send(500);
-                    return;
-                }
-            });
-        }
-    }
-
-    res.send(200);
 };

@@ -3,6 +3,7 @@ var nouns = require('./routes/nouns');
 var admin = require('./routes/admin');
 var http = require('http');
 var path = require('path');
+var config = require('./config');
 
 var app = express();
 
@@ -15,8 +16,12 @@ app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
-app.use(require('stylus').middleware(__dirname + '/public'));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// auth
+var basicAuth = express.basicAuth(function(user,pass){
+	return user === 'admin' && pass === config.password;
+});
 
 // development only
 if ('development' == app.get('env')) {
@@ -24,9 +29,9 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', nouns.list);
-app.get('/admin', admin.index);
 app.get('/random/:number', nouns.random);
-app.post('/import', nouns.import);
+app.get('/admin', basicAuth, admin.index);
+app.post('/admin/import', basicAuth, admin.import);
 
 http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));

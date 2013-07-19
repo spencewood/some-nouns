@@ -1,4 +1,10 @@
 extends layout
 
 block content
-  textarea= 
+    form(action='/admin/import', method='post')
+        fieldset
+            legend Words
+            textarea(name='nouns', rows='20')= data
+            .control-group
+                .controls
+                    button(class='btn btn-large btn-primary', type='submit') Submit
