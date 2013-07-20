@@ -1,3 +1,10 @@
+if(process.env.NODETIME_ACCOUNT_KEY) {
+    require('nodetime').profile({
+        accountKey: process.env.NODETIME_ACCOUNT_KEY,
+        appName: 'Some Nouns'
+    });
+}
+
 var express = require('express');
 var nouns = require('./routes/nouns');
 var admin = require('./routes/admin');
